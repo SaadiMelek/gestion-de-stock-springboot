@@ -21,7 +21,7 @@ public class UtilisateurDto {
     private EntrepriseDto entreprise;
     private List<RoleDto> roles;
 
-    public UtilisateurDto fromEntity(Utilisateur utilisateur) {
+    public static UtilisateurDto fromEntity(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
             // TODO throw an exception
@@ -36,7 +36,7 @@ public class UtilisateurDto {
                 .build();
     }
 
-    public Utilisateur toEntity(UtilisateurDto utilisateurDto) {
+    public static Utilisateur toEntity(UtilisateurDto utilisateurDto) {
         if (utilisateurDto == null) {
             return null;
             // TODO throw an exception

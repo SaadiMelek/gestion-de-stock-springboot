@@ -15,7 +15,7 @@ public class LigneCommandeFournisseurDto {
     private ArticleDto article;
     private CommandeFournisseurDto commandeFournisseur;
 
-    public LigneCommandeFournisseurDto fromEntity(LigneCommandeFournisseur ligneCommandeFournisseur) {
+    public static LigneCommandeFournisseurDto fromEntity(LigneCommandeFournisseur ligneCommandeFournisseur) {
         if (ligneCommandeFournisseur == null) {
             return null;
             // TODO throw an exception
@@ -27,7 +27,7 @@ public class LigneCommandeFournisseurDto {
                 .build();
     }
 
-    public LigneCommandeFournisseur toEntity(LigneCommandeFournisseurDto ligneCommandeFournisseurDto) {
+    public static LigneCommandeFournisseur toEntity(LigneCommandeFournisseurDto ligneCommandeFournisseurDto) {
         if (ligneCommandeFournisseurDto == null) {
             return null;
             // TODO throw an exception

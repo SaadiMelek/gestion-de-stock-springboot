@@ -19,7 +19,7 @@ public class CommandeClientDto {
     @JsonIgnore
     private List<LigneCommandeClientDto> ligneCommandeClients;
 
-    public CommandeClientDto fromEntity(CommandeClient commandeClient) {
+    public static CommandeClientDto fromEntity(CommandeClient commandeClient) {
         if (commandeClient == null) {
             return null;
             // TODO throw an exception
@@ -31,7 +31,7 @@ public class CommandeClientDto {
                 .build();
     }
 
-    public CommandeClient toEntity(CommandeClientDto commandeClientDto) {
+    public static CommandeClient toEntity(CommandeClientDto commandeClientDto) {
         if (commandeClientDto == null) {
             return null;
             // TODO throw an exception

@@ -17,7 +17,7 @@ public class MouvementStockDto {
     private TypeMouvementStock typeMouvementStock;
     private ArticleDto article;
 
-    public MouvementStockDto fromEntity(MouvementStock mouvementStock) {
+    public static MouvementStockDto fromEntity(MouvementStock mouvementStock) {
         if (mouvementStock == null) {
             return null;
             // TODO throw an exception
@@ -29,7 +29,7 @@ public class MouvementStockDto {
                 .build();
     }
 
-    public MouvementStock toEntity(MouvementStockDto mouvementStockDto) {
+    public static MouvementStock toEntity(MouvementStockDto mouvementStockDto) {
         if (mouvementStockDto == null) {
             return null;
             // TODO throw an exception

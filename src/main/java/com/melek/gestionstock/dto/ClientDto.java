@@ -20,7 +20,7 @@ public class ClientDto {
     @JsonIgnore
     private List<CommandeClientDto> commandeClients;
 
-    public ClientDto fromEntity(Client client) {
+    public static ClientDto fromEntity(Client client) {
         if (client == null) {
             return null;
             // TODO throw an exception
@@ -32,15 +32,13 @@ public class ClientDto {
                 .photo(client.getPhoto())
                 .email(client.getEmail())
                 .numTel(client.getNumTel())
-                /*.adresse(
-                        AdresseDto.builder()
-                                .adresse1(client.getAdresse().getAdresse1())
-                                .build()
-                )*/
+                .adresse(
+                        AdresseDto.fromEntity(client.getAdresse())
+                )
                 .build();
     }
 
-    public Client toEntity(ClientDto clientDto) {
+    public static Client toEntity(ClientDto clientDto) {
         if (clientDto == null) {
             return null;
             // TODO throw an exception
@@ -52,6 +50,9 @@ public class ClientDto {
         client.setPhoto(clientDto.getPhoto());
         client.setEmail(clientDto.getEmail());
         client.setNumTel(clientDto.getNumTel());
+        client.setAdresse(
+                AdresseDto.toEntity(clientDto.getAdresse())
+        );
         return client;
     }
 }

@@ -15,7 +15,7 @@ public class LigneCommandeClientDto {
     private ArticleDto article;
     private CommandeClientDto commandeClient;
 
-    public LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
+    public static LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
         if (ligneCommandeClient == null) {
             return null;
             // TODO throw an exception
@@ -27,7 +27,7 @@ public class LigneCommandeClientDto {
                 .build();
     }
 
-    public LigneCommandeClient toEntity(LigneCommandeClientDto ligneCommandeClientDto) {
+    public static LigneCommandeClient toEntity(LigneCommandeClientDto ligneCommandeClientDto) {
         if (ligneCommandeClientDto == null) {
             return null;
             // TODO throw an exception
