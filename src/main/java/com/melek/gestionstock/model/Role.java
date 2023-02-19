@@ -16,6 +16,7 @@ import javax.persistence.Table;
 public class Role extends AbstractEntity {
 
     private String roleName;
+    private Integer idEntreprise;
 
     @ManyToOne
     @JoinColumn(name = "idutilisateur")

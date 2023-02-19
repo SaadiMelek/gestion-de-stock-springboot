@@ -1,6 +1,7 @@
 package com.melek.gestionstock.model;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -21,6 +22,7 @@ public class Client extends AbstractEntity{
     private String photo;
     private String email;
     private String numTel;
+    private Integer idEntreprise;
 
     @Embedded
     private Adresse adresse;

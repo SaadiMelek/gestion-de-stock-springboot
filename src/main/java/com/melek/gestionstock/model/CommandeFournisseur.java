@@ -15,6 +15,7 @@ import java.util.List;
 public class CommandeFournisseur extends AbstractEntity {
     private String code;
     private Instant dateCommande;
+    private Integer idEntreprise;
 
     @ManyToOne
     @JoinColumn(name = "idfournisseur")

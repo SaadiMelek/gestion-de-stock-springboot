@@ -13,9 +13,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "Category")
-public class Category extends AbstractEntity{
+public class Category extends AbstractEntity {
     private String code;
     private String designation;
+    private Integer idEntreprise;
 
     @OneToMany(mappedBy = "category")
     private List<Article> articles;
