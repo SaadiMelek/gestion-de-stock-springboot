@@ -7,11 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
-    Article findByCodeArticle(String code);
+    Optional<Article> findByCodeArticle(String code);
 
     @Query("select a from Article a where a.codeArticle=:code and a.designation=:designation")
     List<Article> findByCustomJpqlQuery(@Param("code") String c, String designation);
