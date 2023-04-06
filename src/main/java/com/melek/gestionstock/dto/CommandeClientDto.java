@@ -14,9 +14,7 @@ public class CommandeClientDto {
     private Integer id;
     private String code;
     private Instant dateCommande;
-    @JsonIgnore
     private ClientDto client;
-    @JsonIgnore
     private List<LigneCommandeClientDto> ligneCommandeClients;
 
     public static CommandeClientDto fromEntity(CommandeClient commandeClient) {

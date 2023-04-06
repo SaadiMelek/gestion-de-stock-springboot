@@ -1,5 +1,6 @@
 package com.melek.gestionstock.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.melek.gestionstock.model.LigneCommandeClient;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ public class LigneCommandeClientDto {
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;
     private ArticleDto article;
+    @JsonIgnore
     private CommandeClientDto commandeClient;
 
     public static LigneCommandeClientDto fromEntity(LigneCommandeClient ligneCommandeClient) {
