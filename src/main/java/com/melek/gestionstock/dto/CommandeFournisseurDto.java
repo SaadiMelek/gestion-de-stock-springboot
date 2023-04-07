@@ -1,6 +1,5 @@
 package com.melek.gestionstock.dto;
 
-import com.melek.gestionstock.model.CommandeClient;
 import com.melek.gestionstock.model.CommandeFournisseur;
 import lombok.Builder;
 import lombok.Data;
@@ -17,15 +16,15 @@ public class CommandeFournisseurDto {
     private FournisseurDto fournisseur;
     private List<LigneCommandeFournisseurDto> ligneCommandeFournisseurs;
 
-    public static CommandeFournisseurDto fromEntity(CommandeClient commandeClient) {
-        if (commandeClient == null) {
+    public static CommandeFournisseurDto fromEntity(CommandeFournisseur commandeFournisseur) {
+        if (commandeFournisseur == null) {
             return null;
             // TODO throw an exception
         }
         return CommandeFournisseurDto.builder()
-                .id(commandeClient.getId())
-                .code(commandeClient.getCode())
-                .dateCommande(commandeClient.getDateCommande())
+                .id(commandeFournisseur.getId())
+                .code(commandeFournisseur.getCode())
+                .dateCommande(commandeFournisseur.getDateCommande())
                 .build();
     }
 

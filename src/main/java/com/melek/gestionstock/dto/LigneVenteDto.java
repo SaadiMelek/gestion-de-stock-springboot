@@ -13,6 +13,7 @@ public class LigneVenteDto {
     private BigDecimal quantite;
     private BigDecimal prixUnitaire;
     private VenteDto vente;
+    private ArticleDto article; // TODO
 
     public static LigneVenteDto fromEntity(LigneVente ligneVente) {
         if (ligneVente == null) {

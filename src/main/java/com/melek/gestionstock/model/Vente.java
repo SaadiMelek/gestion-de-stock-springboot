@@ -3,8 +3,10 @@ package com.melek.gestionstock.model;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +20,7 @@ public class Vente extends AbstractEntity {
     private Instant dateVente;
     private String commentaire;
     private Integer idEntreprise;
+
+    @OneToMany(mappedBy = "vente")
+    private List<LigneVente> ligneVentes;
 }
