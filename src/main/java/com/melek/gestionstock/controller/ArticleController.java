@@ -1,6 +1,6 @@
-package com.melek.gestionstock.Controller;
+package com.melek.gestionstock.controller;
 
-import com.melek.gestionstock.Controller.api.IArticleApi;
+import com.melek.gestionstock.controller.api.IArticleApi;
 import com.melek.gestionstock.dto.ArticleDto;
 import com.melek.gestionstock.service.IArticleService;
 import org.springframework.beans.factory.annotation.Autowired;

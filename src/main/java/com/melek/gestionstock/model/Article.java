@@ -31,7 +31,7 @@ public class Article extends AbstractEntity {
     private String photo;
     private Integer idEntreprise;
 
-    @CreatedDate
+    /*@CreatedDate
     @Column(name="creationDate", nullable = false)
     @JsonIgnore
     private Instant creationDate;
@@ -39,7 +39,7 @@ public class Article extends AbstractEntity {
     @LastModifiedDate
     @Column(name="lastModifiedDate", nullable = false)
     @JsonIgnore
-    private Instant lastModifiedDate;
+    private Instant lastModifiedDate;*/
 
     @ManyToOne
     @JoinColumn(name="idcategory")
