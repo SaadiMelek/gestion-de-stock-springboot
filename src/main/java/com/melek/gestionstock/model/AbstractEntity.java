@@ -20,23 +20,12 @@ public class AbstractEntity implements Serializable {
     @GeneratedValue
     private Integer id;
 
-    //@CreatedDate
-    @Column(name="creationDate", nullable = true)
-    //@JsonIgnore
-    private Instant creationDate = Instant.now();
+    @CreatedDate
+    @Column(name="creationDate", nullable = false, updatable = false)
+    private Instant creationDate;
 
-    //@LastModifiedDate
-    @Column(name="lastModifiedDate", nullable = true)
-    //@JsonIgnore
-    private Instant lastModifiedDate = Instant.now();
+    @LastModifiedDate
+    @Column(name="lastModifiedDate")
+    private Instant lastModifiedDate;
 
-    @PrePersist
-    void prePersist() {
-        creationDate = Instant.now();
-    }
-
-    @PreUpdate
-    void preUpdate() {
-        lastModifiedDate = Instant.now();
-    }
 }

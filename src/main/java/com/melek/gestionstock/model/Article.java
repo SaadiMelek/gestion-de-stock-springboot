@@ -30,17 +30,6 @@ public class Article extends AbstractEntity {
     private BigDecimal prixUnitaireTtc;
     private String photo;
     private Integer idEntreprise;
-
-    /*@CreatedDate
-    @Column(name="creationDate", nullable = false)
-    @JsonIgnore
-    private Instant creationDate;
-
-    @LastModifiedDate
-    @Column(name="lastModifiedDate", nullable = false)
-    @JsonIgnore
-    private Instant lastModifiedDate;*/
-
     @ManyToOne
     @JoinColumn(name="idcategory")
     private Category category;
