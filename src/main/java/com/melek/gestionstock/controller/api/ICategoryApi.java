@@ -20,7 +20,7 @@ public interface ICategoryApi {
     })
     CategoryDto save(@RequestBody CategoryDto dto);
 
-    @GetMapping(value = APP_ROOT + "/categories/{idCategory}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT + "/categories/id/{idCategory}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher une category par ID", notes = "Cette méthode permet de chercher une category par son ID", response = CategoryDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "L'objet category a été trouvé dans la BDD"),
