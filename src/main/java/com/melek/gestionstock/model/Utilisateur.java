@@ -25,7 +25,7 @@ public class Utilisateur extends AbstractEntity {
     private Adresse adresse;
 
     @ManyToOne
-    @JoinColumn(name = "identreprise")
+    @JoinColumn(name = "id_entreprise")
     private Entreprise entreprise;
 
     @OneToMany(mappedBy = "utilisateur")
