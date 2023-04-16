@@ -32,7 +32,9 @@ public class UtilisateurDto {
                 .prenom(utilisateur.getPrenom())
                 .dateNaissance(utilisateur.getDateNaissance())
                 .email(utilisateur.getEmail())
+                .password(utilisateur.getPassword())
                 .photo(utilisateur.getPhoto())
+                .entreprise(EntrepriseDto.fromEntity(utilisateur.getEntreprise()))
                 .build();
     }
 
@@ -47,7 +49,9 @@ public class UtilisateurDto {
         utilisateur.setPrenom(utilisateurDto.getPrenom());
         utilisateur.setDateNaissance(utilisateurDto.getDateNaissance());
         utilisateur.setEmail(utilisateurDto.getEmail());
+        utilisateur.setPassword(utilisateurDto.getPassword());
         utilisateur.setPhoto(utilisateurDto.getPhoto());
+        utilisateur.setEntreprise(EntrepriseDto.toEntity(utilisateurDto.getEntreprise()));
         return utilisateur;
     }
 }

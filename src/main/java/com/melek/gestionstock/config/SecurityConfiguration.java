@@ -9,8 +9,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -18,26 +21,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter { // TOD
 
     @Autowired
     private ApplicationUserDetailsService applicationUserDetailsService;
+    @Autowired
+    private ApplicationRequestFilter applicationRequestFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/**/**/authenticate").permitAll()
-                .anyRequest().authenticated();
+                .authorizeRequests().antMatchers("/**/authenticate",
+                                                            "/**/entreprises/create",
+                                                            "/v2/api-docs",
+                                                            "/swagger-resources",
+                                                            "/swagger-resources/**",
+                                                            "/swagger-ui.html",
+                                                            "/swagger-ui/**",
+                                                            "/configuration/ui",
+                                                            "/configuration/security",
+                                                            "/webjars/**",
+                                                            "/v3/api-docs/**"
+                                                ).permitAll()
+                .anyRequest().authenticated()
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(applicationRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(applicationUserDetailsService);
+        auth.userDetailsService(applicationUserDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
-    @Override
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return NoOpPasswordEncoder.getInstance(); //new BCryptPasswordEncoder(); // : a remettre quand le mot de passe enregistré en BDD est le résultat de new BCryptPasswordEncoder().encode(password)
     }
 }

@@ -1,5 +1,6 @@
 package com.melek.gestionstock.service.impl;
 
+import com.melek.gestionstock.dto.CategoryDto;
 import com.melek.gestionstock.dto.UtilisateurDto;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
@@ -10,6 +11,7 @@ import com.melek.gestionstock.validator.UtilisateurValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +49,20 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
                 utilisateurRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur not found", ErrorCodes.UTILISATEUR_NOT_FOUND))
         );
+    }
+
+    @Override
+    public UtilisateurDto findByEmail(String email) {
+        if (!StringUtils.hasLength(email)) {
+            log.error("email Utilisateur is null");
+            return null;
+        }
+        return utilisateurRepository.findUtilisateurByEmail(email)
+                .map(UtilisateurDto::fromEntity)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Aucun Utilisateur avec le mail ' " + email + " ' n'est trouvé dans la BDD",
+                        ErrorCodes.UTILISATEUR_NOT_FOUND
+                ));
     }
 
     @Override

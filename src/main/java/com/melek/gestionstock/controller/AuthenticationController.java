@@ -2,6 +2,7 @@ package com.melek.gestionstock.controller;
 
 import com.melek.gestionstock.dto.auth.AuthenticationRequest;
 import com.melek.gestionstock.dto.auth.AuthenticationResponse;
+import com.melek.gestionstock.model.auth.ExtendedUser;
 import com.melek.gestionstock.service.auth.ApplicationUserDetailsService;
 import com.melek.gestionstock.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,14 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         authenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword())
+          new UsernamePasswordAuthenticationToken(
+                  request.getLogin(), request.getPassword()
+          )
         );
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getLogin());
-        final String jwt = jwtUtil.generateToken(userDetails);
+        final String jwt = jwtUtil.generateToken((ExtendedUser) userDetails);
         return ResponseEntity.ok(AuthenticationResponse.builder()
-                        .accessToken("dummy_access_token_" + jwt)
+                        .accessToken(jwt)
                 .build());
     }
 }

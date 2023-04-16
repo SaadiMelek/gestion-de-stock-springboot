@@ -2,10 +2,7 @@ package com.melek.gestionstock.model;
 
 import lombok.*;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -21,6 +18,7 @@ public class Fournisseur extends AbstractEntity {
     private String photo;
     private String email;
     private String numTel;
+    @JoinColumn(name="idEntreprise")
     private Integer idEntreprise;
 
     @Embedded

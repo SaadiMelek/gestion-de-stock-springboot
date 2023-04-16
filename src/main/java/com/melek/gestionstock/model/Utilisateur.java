@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
 
-@Data
+//@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -25,7 +27,7 @@ public class Utilisateur extends AbstractEntity {
     private Adresse adresse;
 
     @ManyToOne
-    @JoinColumn(name = "id_entreprise")
+    @JoinColumn(name = "idEntreprise")
     private Entreprise entreprise;
 
     @OneToMany(mappedBy = "utilisateur")

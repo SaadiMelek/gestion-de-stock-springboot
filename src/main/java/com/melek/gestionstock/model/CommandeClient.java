@@ -16,6 +16,7 @@ public class CommandeClient extends AbstractEntity {
 
     private String code;
     private Instant dateCommande;
+    @JoinColumn(name="idEntreprise")
     private Integer idEntreprise;
 
     @ManyToOne

@@ -19,6 +19,7 @@ public class MouvementStock extends AbstractEntity {
 
     private Instant dateMouvement;
     private BigDecimal quantite;
+    @JoinColumn(name="idEntreprise")
     private Integer idEntreprise;
     private TypeMouvementStock typeMouvementStock;
     @ManyToOne
