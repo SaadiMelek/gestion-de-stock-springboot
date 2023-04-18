@@ -1,5 +1,6 @@
 package com.melek.gestionstock.service.auth;
 
+import com.melek.gestionstock.dto.RoleDto;
 import com.melek.gestionstock.dto.UtilisateurDto;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
@@ -28,6 +29,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         if (utilisateur.getRoles() != null) {
             utilisateur.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleName())));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
         }
         return new ExtendedUser(utilisateur.getEmail(), utilisateur.getPassword(), utilisateur.getEntreprise().getId(), authorities);
     }

@@ -1,5 +1,6 @@
 package com.melek.gestionstock.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -24,6 +25,7 @@ public class SwaggerConfiguration {
     
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
+    @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(

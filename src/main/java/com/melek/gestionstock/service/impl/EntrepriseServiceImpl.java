@@ -1,16 +1,21 @@
 package com.melek.gestionstock.service.impl;
 
 import com.melek.gestionstock.dto.EntrepriseDto;
+import com.melek.gestionstock.dto.RoleDto;
+import com.melek.gestionstock.dto.UtilisateurDto;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
 import com.melek.gestionstock.exception.InvalidEntityException;
 import com.melek.gestionstock.repository.EntrepriseRepository;
+import com.melek.gestionstock.repository.RoleRepository;
 import com.melek.gestionstock.service.IEntrepriseService;
+import com.melek.gestionstock.service.IUtilisateurService;
 import com.melek.gestionstock.validator.EntrepriseValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +24,16 @@ import java.util.stream.Collectors;
 public class EntrepriseServiceImpl implements IEntrepriseService {
 
     EntrepriseRepository entrepriseRepository;
+    IUtilisateurService utilisateurService;
+    RoleRepository roleRepository;
 
     @Autowired
-    public EntrepriseServiceImpl(EntrepriseRepository entrepriseRepository) {
+    public EntrepriseServiceImpl(EntrepriseRepository entrepriseRepository,
+                                 IUtilisateurService utilisateurService,
+                                 RoleRepository roleRepository) {
         this.entrepriseRepository = entrepriseRepository;
+        this.utilisateurService = utilisateurService;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -30,11 +41,39 @@ public class EntrepriseServiceImpl implements IEntrepriseService {
         List<String> errors = EntrepriseValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("Entreprise is not valid {}", dto);
-            throw new InvalidEntityException("erreur de validation de l'entreprise", ErrorCodes.ENTREPRISE_NOT_VALID);
+            throw new InvalidEntityException("erreur de validation de l'entreprise", ErrorCodes.ENTREPRISE_NOT_VALID, errors);
         }
-        return EntrepriseDto.fromEntity(
+        EntrepriseDto savedEntreprise = EntrepriseDto.fromEntity(
                 entrepriseRepository.save(EntrepriseDto.toEntity(dto))
         );
+
+        UtilisateurDto utilisateur = fromEntreprise(savedEntreprise);
+        UtilisateurDto savedUser = utilisateurService.save(utilisateur);
+        RoleDto roleDto = RoleDto.builder()
+                .roleName("ADMIN")
+                .utilisateur(savedUser)
+                .build();
+
+        roleRepository.save(RoleDto.toEntity(roleDto));
+
+        return savedEntreprise;
+    }
+
+    private UtilisateurDto fromEntreprise(EntrepriseDto dto) {
+        return UtilisateurDto.builder()
+                .adresse(dto.getAdresse())
+                .nom(dto.getNom())
+                .prenom(dto.getCodeFiscal())
+                .email(dto.getEmail())
+                .password(generateRandomPassword())
+                .entreprise(dto)
+                .dateNaissance(Instant.now())
+                .photo(dto.getPhoto())
+                .build();
+    }
+
+    private String generateRandomPassword() {
+        return "password";
     }
 
     @Override

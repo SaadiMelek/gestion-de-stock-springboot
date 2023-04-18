@@ -5,6 +5,7 @@ import com.melek.gestionstock.dto.auth.AuthenticationResponse;
 import com.melek.gestionstock.model.auth.ExtendedUser;
 import com.melek.gestionstock.service.auth.ApplicationUserDetailsService;
 import com.melek.gestionstock.utils.JwtUtil;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import static com.melek.gestionstock.utils.Constants.AUTHENTICATION_ROOT;
 
 @RestController
 @RequestMapping(AUTHENTICATION_ROOT)
+@Api
 public class AuthenticationController {
 
     @Autowired
