@@ -33,11 +33,13 @@ public class CategoryServiceImpl implements ICategoryService {
         List<String> errors = CategoryValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("Category is not valid {}", dto);
-            throw new InvalidEntityException("La Category n'est pas valide", ErrorCodes.CATEGORY_NOT_FOUND, errors);
+            throw new InvalidEntityException("La Category n'est pas valide", ErrorCodes.CATEGORY_NOT_VALID, errors);
         }
-        return CategoryDto.fromEntity(
-                categoryRepository.save(CategoryDto.toEntity(dto))
+        Category dd = categoryRepository.save(CategoryDto.toEntity(dto));
+        CategoryDto cc = CategoryDto.fromEntity(
+                dd
         );
+        return cc;
     }
 
     @Override
