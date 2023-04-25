@@ -16,9 +16,9 @@ public class Interceptor extends EmptyInterceptor {
                     && !entityName.toLowerCase().contains("roles")
                     && StringUtils.hasLength(idEntreprise)) {
                         if (sql.contains("where")) {
-                            sql = sql + " and " + entityName + ".idEntreprise = " + idEntreprise;
+                            sql = sql + " and " + entityName + ".id_Entreprise = " + idEntreprise;
                         } else {
-                            sql = sql + " where " + entityName + ".idEntreprise = " + idEntreprise;
+                            sql = sql + " where " + entityName + ".id_Entreprise = " + idEntreprise;
                         }
             }
         }

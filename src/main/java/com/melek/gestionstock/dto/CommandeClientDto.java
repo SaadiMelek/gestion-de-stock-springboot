@@ -2,6 +2,7 @@ package com.melek.gestionstock.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.melek.gestionstock.model.CommandeClient;
+import com.melek.gestionstock.model.EtatCommande;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,6 +15,8 @@ public class CommandeClientDto {
     private Integer id;
     private String code;
     private Instant dateCommande;
+    private EtatCommande etatCommande;
+    private Integer idEntreprise;
     private ClientDto client;
     private List<LigneCommandeClientDto> ligneCommandeClients;
 
@@ -26,6 +29,8 @@ public class CommandeClientDto {
                 .id(commandeClient.getId())
                 .code(commandeClient.getCode())
                 .dateCommande(commandeClient.getDateCommande())
+                .idEntreprise(commandeClient.getIdEntreprise())
+                .etatCommande(commandeClient.getEtatCommande())
                 .build();
     }
 
@@ -38,6 +43,12 @@ public class CommandeClientDto {
         commandeClient.setId(commandeClientDto.getId());
         commandeClient.setCode(commandeClientDto.getCode());
         commandeClient.setDateCommande(commandeClientDto.getDateCommande());
+        commandeClient.setIdEntreprise(commandeClientDto.getIdEntreprise());
+        commandeClient.setEtatCommande(commandeClient.getEtatCommande());
         return commandeClient;
+    }
+
+    public boolean isCommandeLivree() {
+        return EtatCommande.LIVREE.equals(this.getEtatCommande());
     }
 }

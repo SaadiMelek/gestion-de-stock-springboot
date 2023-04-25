@@ -3,6 +3,7 @@ package com.melek.gestionstock.config;
 import com.melek.gestionstock.service.auth.ApplicationUserDetailsService;
 import com.melek.gestionstock.utils.JwtUtil;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +21,10 @@ import java.io.IOException;
 @Component
 public class ApplicationRequestFilter extends OncePerRequestFilter {
 
+    @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
     private ApplicationUserDetailsService userDetailsService;
 
     @Override
