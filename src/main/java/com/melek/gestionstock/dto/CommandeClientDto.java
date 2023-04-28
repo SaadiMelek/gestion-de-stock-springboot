@@ -18,6 +18,7 @@ public class CommandeClientDto {
     private EtatCommande etatCommande;
     private Integer idEntreprise;
     private ClientDto client;
+    @JsonIgnore
     private List<LigneCommandeClientDto> ligneCommandeClients;
 
     public static CommandeClientDto fromEntity(CommandeClient commandeClient) {

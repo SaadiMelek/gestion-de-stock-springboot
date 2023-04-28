@@ -2,11 +2,13 @@ package com.melek.gestionstock.controller;
 
 import com.melek.gestionstock.controller.api.ICommandeClientApi;
 import com.melek.gestionstock.dto.CommandeClientDto;
+import com.melek.gestionstock.dto.LigneCommandeClientDto;
 import com.melek.gestionstock.model.EtatCommande;
 import com.melek.gestionstock.service.ICommandeClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -51,6 +53,20 @@ public class CommandeClientController implements ICommandeClientApi {
     }
 
     @Override
+    public ResponseEntity<CommandeClientDto> deleteArticle(Integer idCommande, Integer idLigneCommande) {
+        return ResponseEntity.ok(
+                commandeClientService.deleteArticle(idCommande, idLigneCommande)
+        );
+    }
+
+    @Override
+    public ResponseEntity<CommandeClientDto> updateArticle(Integer idCommande, Integer idLigneCommande, Integer idArticle) {
+        return ResponseEntity.ok(
+                commandeClientService.updateArticle(idCommande, idLigneCommande, idArticle)
+        );
+    }
+
+    @Override
     public ResponseEntity<CommandeClientDto> findById(Integer id) {
         return ResponseEntity.ok(commandeClientService.findById(id));
     }
@@ -64,7 +80,12 @@ public class CommandeClientController implements ICommandeClientApi {
     public ResponseEntity<List<CommandeClientDto>> findAll() {
         return ResponseEntity.ok(commandeClientService.findAll());
     }
-
+    @Override
+    public ResponseEntity<List<LigneCommandeClientDto>> findAllLignesCommandesClientByCommandeClientId(Integer idCommande) {
+        return ResponseEntity.ok(
+                commandeClientService.findAllLignesCommandesClientByCommandeClientId(idCommande)
+        );
+    }
     @Override
     public ResponseEntity delete(Integer id) {
         commandeClientService.delete(id);

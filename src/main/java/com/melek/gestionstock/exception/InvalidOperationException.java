@@ -2,9 +2,14 @@ package com.melek.gestionstock.exception;
 
 import lombok.Getter;
 
+import java.util.List;
+
 public class InvalidOperationException extends RuntimeException {
     @Getter
     private ErrorCodes errorCode;
+
+    @Getter
+    private List<String> errors;
 
     public InvalidOperationException(String message) {
         super(message);
@@ -22,5 +27,11 @@ public class InvalidOperationException extends RuntimeException {
     public InvalidOperationException(String message, Throwable cause, ErrorCodes errorCode) {
         super(message, cause);
         this.errorCode = errorCode;
+    }
+
+    public InvalidOperationException(String message, ErrorCodes errorCode, List<String> errors) {
+        super(message);
+        this.errorCode = errorCode;
+        this.errors = errors;
     }
 }

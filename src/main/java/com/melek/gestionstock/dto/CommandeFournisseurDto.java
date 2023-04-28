@@ -1,5 +1,6 @@
 package com.melek.gestionstock.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.melek.gestionstock.model.CommandeFournisseur;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class CommandeFournisseurDto {
     private String code;
     private Instant dateCommande;
     private FournisseurDto fournisseur;
+    @JsonIgnore
     private List<LigneCommandeFournisseurDto> ligneCommandeFournisseurs;
 
     public static CommandeFournisseurDto fromEntity(CommandeFournisseur commandeFournisseur) {
