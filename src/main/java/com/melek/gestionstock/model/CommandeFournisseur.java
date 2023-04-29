@@ -15,6 +15,7 @@ import java.util.List;
 public class CommandeFournisseur extends AbstractEntity {
     private String code;
     private Instant dateCommande;
+    private EtatCommande etatCommande;
     @JoinColumn(name="idEntreprise")
     private Integer idEntreprise;
 
