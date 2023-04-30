@@ -22,10 +22,10 @@ public class LigneCommandeClient extends AbstractEntity {
     private Integer idEntreprise;
 
     @ManyToOne
-    @JoinColumn(name = "idarticle")
+    @JoinColumn(name = "idArticle")
     private Article article;
 
     @ManyToOne
-    @JoinColumn(name = "idcommandeClient")
+    @JoinColumn(name = "idCommandeClient")
     private CommandeClient commandeClient;
 }

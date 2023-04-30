@@ -23,10 +23,10 @@ public class LigneCommandeFournisseur extends AbstractEntity {
     private Integer idEntreprise;
 
     @ManyToOne
-    @JoinColumn(name = "idarticle")
+    @JoinColumn(name = "idArticle")
     private Article article;
 
     @ManyToOne
-    @JoinColumn(name = "idcommandefournisseur")
+    @JoinColumn(name = "idCommandeFournisseur")
     private CommandeFournisseur commandeFournisseur;
 }

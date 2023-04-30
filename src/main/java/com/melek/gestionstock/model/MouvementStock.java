@@ -23,6 +23,6 @@ public class MouvementStock extends AbstractEntity {
     private Integer idEntreprise;
     private TypeMouvementStock typeMouvementStock;
     @ManyToOne
-    @JoinColumn(name = "idarticle")
+    @JoinColumn(name = "idArticle")
     private Article article;
 }

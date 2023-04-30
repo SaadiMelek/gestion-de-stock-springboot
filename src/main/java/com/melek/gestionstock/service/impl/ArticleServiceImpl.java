@@ -1,11 +1,17 @@
 package com.melek.gestionstock.service.impl;
 
 import com.melek.gestionstock.dto.ArticleDto;
+import com.melek.gestionstock.dto.LigneCommandeClientDto;
+import com.melek.gestionstock.dto.LigneCommandeFournisseurDto;
+import com.melek.gestionstock.dto.LigneVenteDto;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
 import com.melek.gestionstock.exception.InvalidEntityException;
 import com.melek.gestionstock.model.Article;
 import com.melek.gestionstock.repository.ArticleRepository;
+import com.melek.gestionstock.repository.LigneCommandeClientRepository;
+import com.melek.gestionstock.repository.LigneCommandeFournisseurRepository;
+import com.melek.gestionstock.repository.LigneVenteRepository;
 import com.melek.gestionstock.service.IArticleService;
 import com.melek.gestionstock.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +28,19 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl implements IArticleService {
 
     private ArticleRepository articleRepository;
+    private LigneVenteRepository ligneVenteRepository;
+    private LigneCommandeClientRepository ligneCommandeClientRepository;
+    private LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository;
 
     @Autowired
-    public ArticleServiceImpl(ArticleRepository articleRepository) {
+    public ArticleServiceImpl(ArticleRepository articleRepository,
+                              LigneVenteRepository ligneVenteRepository,
+                              LigneCommandeClientRepository ligneCommandeClientRepository,
+                              LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository) {
         this.articleRepository = articleRepository;
+        this.ligneVenteRepository = ligneVenteRepository;
+        this.ligneCommandeClientRepository = ligneCommandeClientRepository;
+        this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
     }
 
     @Override
@@ -55,7 +70,7 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public ArticleDto findByCodeArticle(String codeArticle) {
-        if (StringUtils.hasLength(codeArticle)) {
+        if (!StringUtils.hasLength(codeArticle)) {
             log.error("Article code is null");
             return null;
         }
@@ -73,6 +88,34 @@ public class ArticleServiceImpl implements IArticleService {
         return articleRepository.findAll().stream()
                 .map(article -> ArticleDto.fromEntity(article))
                 //.map(ArticleDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneVenteDto> findHistoriqueVentes(Integer idArticle) {
+        return ligneVenteRepository.findAllByArticleId(idArticle).stream()
+                .map(LigneVenteDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneCommandeClientDto> findHistoriqueCommandesClient(Integer idArticle) {
+        return ligneCommandeClientRepository.findAllByArticleId(idArticle).stream()
+                .map(LigneCommandeClientDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneCommandeFournisseurDto> findHistoriqueCommandesFournisseur(Integer idArticle) {
+        return ligneCommandeFournisseurRepository.findAllByArticleId(idArticle).stream()
+                .map(LigneCommandeFournisseurDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ArticleDto> findAllArticlesByIdCategory(Integer idCategory) {
+        return articleRepository.findAllByCategoryId(idCategory).stream()
+                .map(ArticleDto::fromEntity)
                 .collect(Collectors.toList());
     }
 

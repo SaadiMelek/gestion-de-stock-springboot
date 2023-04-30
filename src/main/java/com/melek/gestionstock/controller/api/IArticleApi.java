@@ -1,6 +1,9 @@
 package com.melek.gestionstock.controller.api;
 
 import com.melek.gestionstock.dto.ArticleDto;
+import com.melek.gestionstock.dto.LigneCommandeClientDto;
+import com.melek.gestionstock.dto.LigneCommandeFournisseurDto;
+import com.melek.gestionstock.dto.LigneVenteDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -23,7 +26,7 @@ public interface IArticleApi {
     })
     ArticleDto save(@RequestBody ArticleDto dto);
 
-    @GetMapping(value = APP_ROOT + "/articles/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT + "/articles/id/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher un article par ID", notes = "Cette méthode permet de chercher un article par son ID", response = ArticleDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "L'objet article a été trouvé dans la BDD"),
@@ -31,7 +34,7 @@ public interface IArticleApi {
     })
     ArticleDto findById(@PathVariable("idArticle") Integer id);
 
-    @GetMapping(value = APP_ROOT + "/articles/{codeArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT + "/articles/code/{codeArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Rechercher un article par CODE", notes = "Cette méthode permet de chercher un article par son code", response = ArticleDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "L'objet article a été trouvé dans la BDD"),
@@ -52,5 +55,12 @@ public interface IArticleApi {
             @ApiResponse(code = 200, message = "L'article a été supprimé")
     })
     void delete(@PathVariable("idArticle") Integer id);
-
+    @GetMapping(value = APP_ROOT + "/articles/historique/vente/{idArticle}")
+    List<LigneVenteDto> findHistoriqueVentes(Integer idArticle);
+    @GetMapping(value = APP_ROOT + "/articles/historique/commandeclient/{idArticle}")
+    List<LigneCommandeClientDto> findHistoriqueCommandesClient(Integer idArticle);
+    @GetMapping(value = APP_ROOT + "/articles/historique/commandefournisseur/{idArticle}")
+    List<LigneCommandeFournisseurDto> findHistoriqueCommandesFournisseur(Integer idArticle);
+    @GetMapping(value = APP_ROOT + "/articles/filter/{idCategory}")
+    List<ArticleDto> findAllArticlesByIdCategory(Integer idCategory);
 }
