@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("ArticleServiceImpl2")
-public class ArticleServiceImpl2 implements IArticleService {
+//@Service("ArticleServiceImpl2")
+public class ArticleServiceImpl2 /*implements IArticleService*/ {
 
-    @Override
+    /*@Override
     public ArticleDto save(ArticleDto dto) {
         return null;
     }
@@ -55,5 +55,5 @@ public class ArticleServiceImpl2 implements IArticleService {
     @Override
     public void delete(Integer id) {
 
-    }
+    }*/
 }
