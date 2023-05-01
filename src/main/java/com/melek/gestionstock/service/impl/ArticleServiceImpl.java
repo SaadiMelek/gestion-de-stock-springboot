@@ -7,7 +7,11 @@ import com.melek.gestionstock.dto.LigneVenteDto;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
 import com.melek.gestionstock.exception.InvalidEntityException;
+import com.melek.gestionstock.exception.InvalidOperationException;
 import com.melek.gestionstock.model.Article;
+import com.melek.gestionstock.model.LigneCommandeClient;
+import com.melek.gestionstock.model.LigneCommandeFournisseur;
+import com.melek.gestionstock.model.LigneVente;
 import com.melek.gestionstock.repository.ArticleRepository;
 import com.melek.gestionstock.repository.LigneCommandeClientRepository;
 import com.melek.gestionstock.repository.LigneCommandeFournisseurRepository;
@@ -124,6 +128,18 @@ public class ArticleServiceImpl implements IArticleService {
         if (id == null) {
             log.error("Article id is null");
             return;
+        }
+        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findAllByArticleId(id);
+        if (!ligneCommandeClients.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article déjà utilisé dans des commandes clients", ErrorCodes.ARTICLE_ALREADY_IN_USE);
+        }
+        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByArticleId(id);
+        if (!ligneCommandeFournisseurs.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article déjà utilisé dans des commandes fournisseur", ErrorCodes.ARTICLE_ALREADY_IN_USE);
+        }
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(id);
+        if (!ligneVentes.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article déjà utilisé dans des ventes", ErrorCodes.ARTICLE_ALREADY_IN_USE);
         }
         articleRepository.deleteById(id);
     }

@@ -4,7 +4,9 @@ import com.melek.gestionstock.dto.CategoryDto;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
 import com.melek.gestionstock.exception.InvalidEntityException;
-import com.melek.gestionstock.model.Category;
+import com.melek.gestionstock.exception.InvalidOperationException;
+import com.melek.gestionstock.model.*;
+import com.melek.gestionstock.repository.ArticleRepository;
 import com.melek.gestionstock.repository.CategoryRepository;
 import com.melek.gestionstock.service.ICategoryService;
 import com.melek.gestionstock.validator.CategoryValidator;
@@ -22,10 +24,12 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements ICategoryService {
 
     private CategoryRepository categoryRepository;
+    private ArticleRepository articleRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ArticleRepository articleRepository) {
         this.categoryRepository = categoryRepository;
+        this.articleRepository = articleRepository;
     }
 
     @Override
@@ -75,6 +79,10 @@ public class CategoryServiceImpl implements ICategoryService {
         if (id == null) {
             log.error("Category id is null");
             return;
+        }
+        List<Article> articles = articleRepository.findAllByCategoryId(id);
+        if (!articles.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer cette catégorie, elle est déjà utilisé", ErrorCodes.CATEGORY_ALREADY_IN_USE);
         }
         categoryRepository.deleteById(id);
     }

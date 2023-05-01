@@ -4,6 +4,7 @@ import com.melek.gestionstock.dto.*;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
 import com.melek.gestionstock.exception.InvalidEntityException;
+import com.melek.gestionstock.exception.InvalidOperationException;
 import com.melek.gestionstock.model.*;
 import com.melek.gestionstock.repository.ArticleRepository;
 import com.melek.gestionstock.repository.LigneVenteRepository;
@@ -101,6 +102,10 @@ public class VenteServiceImpl implements IVenteService {
         if (id == null) {
             log.error("Id Vente is null");
             return;
+        }
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByVenteId(id);
+        if (!ligneVentes.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer une vente déjà utilisé", ErrorCodes.VENTE_ALREADY_IN_USE);
         }
         venteRepository.deleteById(id);
     }

@@ -5,7 +5,10 @@ import com.melek.gestionstock.dto.ClientDto;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
 import com.melek.gestionstock.exception.InvalidEntityException;
+import com.melek.gestionstock.exception.InvalidOperationException;
+import com.melek.gestionstock.model.CommandeClient;
 import com.melek.gestionstock.repository.ClientRepository;
+import com.melek.gestionstock.repository.CommandeClientRepository;
 import com.melek.gestionstock.service.IClientService;
 import com.melek.gestionstock.validator.ClientValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +23,12 @@ import java.util.stream.Collectors;
 public class ClientServiceImpl implements IClientService {
 
     private ClientRepository clientRepository;
+    private CommandeClientRepository commandeClientRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, CommandeClientRepository commandeClientRepository) {
         this.clientRepository = clientRepository;
+        this.commandeClientRepository = commandeClientRepository;
     }
 
     @Override
@@ -61,6 +66,10 @@ public class ClientServiceImpl implements IClientService {
     public void delete(Integer id) {
         if (id == null) {
             log.warn("Id is null");
+        }
+        List<CommandeClient> commandeClients = commandeClientRepository.findAllByClientId(id);
+        if (!commandeClients.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un client qui a déjà des commandes client", ErrorCodes.CLIENT_ALREADY_IN_USE);
         }
         clientRepository.deleteById(id);
     }
