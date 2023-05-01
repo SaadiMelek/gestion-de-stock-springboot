@@ -2,10 +2,7 @@ package com.melek.gestionstock.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -19,9 +16,10 @@ public class MouvementStock extends AbstractEntity {
 
     private Instant dateMouvement;
     private BigDecimal quantite;
-    @JoinColumn(name="idEntreprise")
+    @Column(name="idEntreprise")
     private Integer idEntreprise;
     private TypeMouvementStock typeMouvementStock;
+    private SourceMouvementStock sourceMouvementStock;
     @ManyToOne
     @JoinColumn(name = "idArticle")
     private Article article;

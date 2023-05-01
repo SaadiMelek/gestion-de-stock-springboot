@@ -1,9 +1,6 @@
 package com.melek.gestionstock.service.impl;
 
-import com.melek.gestionstock.dto.ArticleDto;
-import com.melek.gestionstock.dto.ClientDto;
-import com.melek.gestionstock.dto.CommandeClientDto;
-import com.melek.gestionstock.dto.LigneCommandeClientDto;
+import com.melek.gestionstock.dto.*;
 import com.melek.gestionstock.exception.EntityNotFoundException;
 import com.melek.gestionstock.exception.ErrorCodes;
 import com.melek.gestionstock.exception.InvalidEntityException;
@@ -14,6 +11,7 @@ import com.melek.gestionstock.repository.ClientRepository;
 import com.melek.gestionstock.repository.CommandeClientRepository;
 import com.melek.gestionstock.repository.LigneCommandeClientRepository;
 import com.melek.gestionstock.service.ICommandeClientService;
+import com.melek.gestionstock.service.IMouvementStockService;
 import com.melek.gestionstock.validator.ArticleValidator;
 import com.melek.gestionstock.validator.CommandeClientValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,16 +35,19 @@ public class CommandeClientServiceImpl implements ICommandeClientService {
     private ArticleRepository articleRepository;
 
     private LigneCommandeClientRepository ligneCommandeClientRepository;
+    private IMouvementStockService mouvementStockService;
 
     @Autowired
     public CommandeClientServiceImpl(CommandeClientRepository commandeClientRepository,
                                      ClientRepository clientRepository,
                                      ArticleRepository articleRepository,
-                                     LigneCommandeClientRepository ligneCommandeClientRepository) {
+                                     LigneCommandeClientRepository ligneCommandeClientRepository,
+                                     IMouvementStockService mouvementStockService) {
         this.commandeClientRepository = commandeClientRepository;
         this.clientRepository = clientRepository;
         this.articleRepository = articleRepository;
         this.ligneCommandeClientRepository = ligneCommandeClientRepository;
+        this.mouvementStockService = mouvementStockService;
     }
 
     @Override
@@ -102,9 +104,11 @@ public class CommandeClientServiceImpl implements ICommandeClientService {
         }
         CommandeClientDto commandeClient = checkEtatCommande(idCommande);
         commandeClient.setEtatCommande(etatCommande);
-        return CommandeClientDto.fromEntity(
-                commandeClientRepository.save(CommandeClientDto.toEntity(commandeClient))
-        );
+        CommandeClient savedCommandeClient = commandeClientRepository.save(CommandeClientDto.toEntity(commandeClient));
+        if (commandeClient.isCommandeLivree()) {
+            updateMouvementStock(idCommande);// new
+        }
+        return CommandeClientDto.fromEntity(savedCommandeClient);
     }
     @Override
     public CommandeClientDto updateQuantiteCommande(Integer idCommande, Integer idLigneCommande, BigDecimal quantity) {
@@ -256,5 +260,20 @@ public class CommandeClientServiceImpl implements ICommandeClientService {
             log.error("Id de " + msg + " is null");
             throw new InvalidOperationException("Impossible de modifier l'état de la commande avec un " + msg + " Id Article null", ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
+    }
+
+    private void updateMouvementStock(Integer idCommande) {
+        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findAllByCommandeClientId(idCommande);
+        ligneCommandeClients.forEach(ligne -> {
+            MouvementStockDto mouvementStockDto = MouvementStockDto.builder()
+                    .article(ArticleDto.fromEntity(ligne.getArticle()))
+                    .dateMouvement(Instant.now())
+                    .typeMouvementStock(TypeMouvementStock.SORTIE)
+                    .sourceMouvementStock(SourceMouvementStock.COMMANDE_CLIENT)
+                    .quantite(ligne.getQuantite())
+                    .idEntreprise(ligne.getIdEntreprise())
+                    .build();
+            mouvementStockService.sortieStock(mouvementStockDto);
+        });
     }
 }

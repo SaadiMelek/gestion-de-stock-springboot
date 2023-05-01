@@ -18,7 +18,7 @@ public class Fournisseur extends AbstractEntity {
     private String photo;
     private String email;
     private String numTel;
-    @JoinColumn(name="idEntreprise")
+    @Column(name="idEntreprise")
     private Integer idEntreprise;
 
     @Embedded

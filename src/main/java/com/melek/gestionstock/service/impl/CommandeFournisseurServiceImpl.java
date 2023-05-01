@@ -11,6 +11,7 @@ import com.melek.gestionstock.repository.CommandeFournisseurRepository;
 import com.melek.gestionstock.repository.FournisseurRepository;
 import com.melek.gestionstock.repository.LigneCommandeFournisseurRepository;
 import com.melek.gestionstock.service.ICommandeFournisseurService;
+import com.melek.gestionstock.service.IMouvementStockService;
 import com.melek.gestionstock.validator.ArticleValidator;
 import com.melek.gestionstock.validator.CommandeFournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,16 +35,19 @@ public class CommandeFournisseurServiceImpl implements ICommandeFournisseurServi
     private FournisseurRepository fournisseurRepository;
     private ArticleRepository articleRepository;
     private LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository;
+    private IMouvementStockService mouvementStockService;
 
     @Autowired
     public CommandeFournisseurServiceImpl(CommandeFournisseurRepository commandeFournisseurRepository,
                                           FournisseurRepository fournisseurRepository,
-                                     ArticleRepository articleRepository,
-                                          LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository) {
+                                          ArticleRepository articleRepository,
+                                          LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository,
+                                          IMouvementStockService mouvementStockService) {
         this.commandeFournisseurRepository = commandeFournisseurRepository;
         this.fournisseurRepository = fournisseurRepository;
         this.articleRepository = articleRepository;
         this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
+        this.mouvementStockService = mouvementStockService;
     }
 
     @Override
@@ -133,9 +138,11 @@ public class CommandeFournisseurServiceImpl implements ICommandeFournisseurServi
         }
         CommandeFournisseurDto commandeFournisseur = checkEtatCommande(idCommande);
         commandeFournisseur.setEtatCommande(etatCommande);
-        return CommandeFournisseurDto.fromEntity(
-                commandeFournisseurRepository.save(CommandeFournisseurDto.toEntity(commandeFournisseur))
-        );
+        CommandeFournisseur savedCommandeFournisseur = commandeFournisseurRepository.save(CommandeFournisseurDto.toEntity(commandeFournisseur));
+        if (commandeFournisseur.isCommandeLivree()) {
+            updateMouvementStock(idCommande);// new
+        }
+        return CommandeFournisseurDto.fromEntity(savedCommandeFournisseur);
     }
 
     @Override
@@ -251,5 +258,20 @@ public class CommandeFournisseurServiceImpl implements ICommandeFournisseurServi
             throw new EntityNotFoundException("Aucune ligne commande Fournisseur n'est trouvé avec l'ID' " + idLigneCommande, ErrorCodes.COMMANDE_FOURNISSEUR_NOT_FOUND);
         }
         return ligneCommandeFournisseurOptional;
+    }
+
+    private void updateMouvementStock(Integer idCommande) {
+        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByCommandeFournisseurId(idCommande);
+        ligneCommandeFournisseurs.forEach(ligne -> {
+            MouvementStockDto mouvementStockDto = MouvementStockDto.builder()
+                    .article(ArticleDto.fromEntity(ligne.getArticle()))
+                    .dateMouvement(Instant.now())
+                    .typeMouvementStock(TypeMouvementStock.ENTREE)
+                    .sourceMouvementStock(SourceMouvementStock.COMMANDE_FOURNISSEUR)
+                    .quantite(ligne.getQuantite())
+                    .idEntreprise(ligne.getIdEntreprise())
+                    .build();
+            mouvementStockService.entreeStock(mouvementStockDto);
+        });
     }
 }

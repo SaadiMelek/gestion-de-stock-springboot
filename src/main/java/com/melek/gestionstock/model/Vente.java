@@ -2,10 +2,7 @@ package com.melek.gestionstock.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
 
@@ -20,7 +17,7 @@ public class Vente extends AbstractEntity {
     private String code;
     private Instant dateVente;
     private String commentaire;
-    @JoinColumn(name="idEntreprise")
+    @Column(name="idEntreprise")
     private Integer idEntreprise;
 
     @OneToMany(mappedBy = "vente")

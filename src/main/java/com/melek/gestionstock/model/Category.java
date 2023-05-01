@@ -2,10 +2,7 @@ package com.melek.gestionstock.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -17,7 +14,7 @@ import java.util.List;
 public class Category extends AbstractEntity {
     private String code;
     private String designation;
-    @JoinColumn(name="idEntreprise")
+    @Column(name="idEntreprise")
     private Integer idEntreprise;
     @OneToMany(mappedBy = "category")
     private List<Article> articles;
