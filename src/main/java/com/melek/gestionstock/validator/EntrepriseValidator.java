@@ -33,6 +33,7 @@ public class EntrepriseValidator {
             if (dto.getNumTel() == null) {
                 errors.add("Veuillez renseigner le numTel de l'entreprise");
             }
+            errors.addAll(AdresseValidator.validate(dto.getAdresse()));
         }
         return errors;
     }

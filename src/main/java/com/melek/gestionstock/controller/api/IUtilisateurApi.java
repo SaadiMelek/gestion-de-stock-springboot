@@ -20,4 +20,6 @@ public interface IUtilisateurApi {
     List<UtilisateurDto> findAll();
     @DeleteMapping(value = UTILISATEUR_ENDPOINT + "/{idUtilisateur}")
     void delete(@PathVariable("idUtilisateur") Integer id);
+
+    // public UtilisateurDto changePassword(ChangePasswordUtilisateurDto dto);
 }

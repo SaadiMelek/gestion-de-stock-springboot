@@ -29,6 +29,7 @@ public class ClientValidator {
             if (dto.getNumTel() == null) {
                 errors.add("Veuillez renseigner le numéro de téléphone du client");
             }
+            errors.addAll(AdresseValidator.validate(dto.getAdresse()));
         }
         return errors;
     }
